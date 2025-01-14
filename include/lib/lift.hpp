@@ -10,11 +10,11 @@ namespace lib {
 
 enum class LiftState {Disabled, Scoring};
 
-class Lift : public StateMachine<LiftState, LiftState::Disabled>, public ryan::TaskWrapper {
+class Lift : public StateMachine<LiftState, LiftState::Scoring>, public ryan::TaskWrapper {
 
 private:
   std::shared_ptr<pros::Motor> motor;
-  const float DOWN_ANGLE = 0;
+  const float DOWN_ANGLE = 5;
   const float UP_ANGLE = -710 ;
 
   const float gearRatio;
@@ -23,7 +23,7 @@ private:
 
   float p = 5;
 
-  float d = 40;
+  float d = 20;
 
   float prev_error = 0;
 
