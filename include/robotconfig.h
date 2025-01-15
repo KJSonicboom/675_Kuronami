@@ -5,6 +5,7 @@
 #include "lib/chassis.h"
 
 // #include "EZ-Template/api.hpp"
+#include "lemlib/api.hpp"
 
 #include "pros/adi.hpp"
 #include "pros/motors.hpp"
@@ -63,8 +64,9 @@ inline lib::TrackingWheel Htrack(odomH, 2.44);
 // create the chassis
 inline lib::Chassis chassis = lib::Chassis(&leftMotors, &rightMotors, &imu, &Vtrack, 480, 2.75);
 
+//======================EZ & Lemlib===========================
 
-// ez::Drive chassis(
+// ez::Drive ezChassis(
 //     // These are your drive motors, the first motor is used for sensing!
 //     {-9, -16, -21},     // Left Chassis Ports (negative port will reverse it!)
 //     {3, 14, 18},  // Right Chassis Ports (negative port will reverse it!)
@@ -73,4 +75,4 @@ inline lib::Chassis chassis = lib::Chassis(&leftMotors, &rightMotors, &imu, &Vtr
 //     3.25,   // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
 //     480);  // Wheel RPM = cartridge * (motor gear / wheel gear)
 
-
+// ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels

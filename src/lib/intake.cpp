@@ -12,7 +12,7 @@ void Intake::loop() {
 
   while (true) {
     // Intake jam logic
-    if (std::abs(motor->get_actual_velocity()) < 5 && getState() != IntakeState::Idle) {
+    if (std::abs(motor->get_actual_velocity()) < 15 && getState() != IntakeState::Idle) {
       if (jamStartTime == 0) {
         // First time detecting slow velocity
         jamStartTime = pros::millis();
@@ -40,8 +40,6 @@ void Intake::loop() {
 
     case IntakeState::Idle:
 
-      color->set_led_pwm(0);
-
       motor->move(0);
 
       break;
@@ -51,6 +49,8 @@ void Intake::loop() {
       color->set_led_pwm(0);
 
       motor->move(127);
+
+      // controller.set_text(0, 5, std::to_string(motor->get_position()));
 
       break;
 
@@ -62,10 +62,11 @@ void Intake::loop() {
 
       if(detectRingColor() == teamColor){
         motor->tare_position();
-        while(220 > abs(motor->get_position())){
-          motor->move(-72);
-        }
-        motor->move_absolute(110, 72);
+        motor->move_absolute(350, 400);
+        delay(750);
+        motor->move_absolute(-300, 200);
+        color->set_led_pwm(0);
+        delay(1250);
       }
 
       break;
@@ -74,13 +75,12 @@ void Intake::loop() {
 
       color->set_led_pwm(100);
 
-      motor->move(127);
+      motor->move(95);
 
-      if(sort_override != false && detectRingColor() != teamColor){
+      if(sort_override != false && detectRingColor() != teamColor && detectRingColor() != ringColor::NOTHING){
         motor->tare_position();
-        while(600 > abs(motor->get_position())){
-          motor->move(127);
-        }
+        motor->move_absolute(525, 380);
+        delay(400);
         motor->move(0);
         delay(250);
 

@@ -39,9 +39,6 @@ void Chassis::arcadeMod(double forward, double turn, std::vector<double> curves,
   forward = inputCurve(forward, curves[0]);
   turn = inputCurve(turn, curves[1]);
 
-  std::string col = std::to_string(forward);
-  controller.set_text(0, 5, col);
-
   // arcade drive
   leftMotors->move(forward + turn);
   rightMotors->move(forward - turn);

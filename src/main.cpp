@@ -28,6 +28,8 @@ void initialize() {
     pros::delay(10);
   }
 
+  // ezChassis.odom_tracker_back_set(&horiz_tracker);
+
   odomH.reset();
   odomV.reset();
   pros::delay(500);
@@ -78,13 +80,11 @@ void opcontrol() {
     //clamp control
     if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) mogoClamp.toggle();
 
-        //doinker control
+    //doinker control
     if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)) doinker.toggle();
 
     //direct mech control
-    if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)) direct.setState(lib::LiftState::Scoring);
-    else direct.setState(lib::LiftState::Disabled);
-
+    if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)) direct.getState() == lib::LiftState::Scoring ? direct.setState(lib::LiftState::Disabled) : direct.setState(lib::LiftState::Scoring);
 
     pros::delay(15);
   }

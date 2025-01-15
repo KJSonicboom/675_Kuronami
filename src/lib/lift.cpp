@@ -10,30 +10,38 @@ void Lift::loop() {
 
   uint32_t now = pros::millis();
   motor->tare_position();
+  
   while (true) {
     switch (getState()) {
 
     case LiftState::Disabled:
 
-      target = DOWN_ANGLE;      
+      motor->move_absolute(DOWN_ANGLE, 50);  
 
       break;
 
     case LiftState::Scoring:
 
-      target = UP_ANGLE;
+      motor->move_absolute(UP_ANGLE, 100);
 
       break;
     }
-
-    // float error = abs(target - motor->get_position());
-    // target == UP_ANGLE ? motor->move(error * p + (error - prev_error) * d) : motor->move(-error * 1 + (error - prev_error) * d); //may need to force this into a negative position
-    // prev_error = error;
-
-    
-
-    pros::Task::delay_until(&now, 15); //no understand
   }
+}
+
+lemlib::PID armPID(4, 0, 20);
+
+void Lift::moveArm(int targetDegree, int timeout){
+  error = 100;
+  lemlib::Timer armTimer(timeout);
+  while(abs(error) > 10 && !armTimer.isDone()){
+      currentPosition = motor->get_position();
+      error = targetDegree - currentPosition; 
+      motor->move(armPID.update(error));
+  }
+
+  armPID.reset();
+
 }
 
 float Lift::getAngle() { return target; }
