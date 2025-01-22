@@ -13,11 +13,15 @@
 
 rd::Selector selector({{"Skills", skills},
                        {"Red Goal Side", red_goal_side},
-                       {"Red Stack Side", red_stack_side},
-                       {"Blue Goal Side", blue_goal_side},
-                       {"Blue Stack Side", blue_stack_side}});
+                       {"Blue Goal Side", blue_goal_side}
+});
 
 // ========================= Competition Functions ========================= //
+
+// create the chassis
+inline lib::Chassis chassis = lib::Chassis(&leftMotors, &rightMotors, &imu, &Vtrack, 480, 2.75);
+
+//======================EZ & Lemlib===========================
 
 void initialize() {
 
@@ -28,8 +32,6 @@ void initialize() {
     pros::delay(10);
   }
 
-  // ezChassis.odom_tracker_back_set(&horiz_tracker);
-
   odomH.reset();
   odomV.reset();
   pros::delay(500);
@@ -37,6 +39,10 @@ void initialize() {
   chassis.startTask();
   direct.startTask();
   intake.startTask();
+
+  selector.focus();
+
+  init();
 }
 
 void disabled() {
@@ -46,17 +52,17 @@ void disabled() {
 void competition_initialize() {}
 
 void autonomous() {
-  // selector.focus();
-  leftMotors.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-  rightMotors.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+  
+  red_goal_side();
 
-
-  // selector.run_auton();
 }
 
 void opcontrol() {
 
   float directTarget = -1;
+
+  bool isUp = false;
+  bool trapDirect = false;
 
   leftMotors.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   rightMotors.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
@@ -66,16 +72,23 @@ void opcontrol() {
     chassis.arcadeMod(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y), 
                           controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X), {10 , 10}, 3); //needs tuning
 
-        //intake control
+    //intake control
     if(controller.get_digital(E_CONTROLLER_DIGITAL_R1)){
-        if(!intake.sort_override) intake.setState(lib::IntakeState::Eat);
-        else intake.setState(lib::IntakeState::Picky);
+      // direct.setState(lib::LiftState::Down);
+      if(!intake.sort_override) intake.setState(lib::IntakeState::Eat);
+      else intake.setState(lib::IntakeState::Picky);
     }
     else if(controller.get_digital(E_CONTROLLER_DIGITAL_R2)) intake.setState(lib::IntakeState::Out);
     else if(controller.get_digital(E_CONTROLLER_DIGITAL_L2)) intake.setState(lib::IntakeState::Reload);
-    else intake.setState(lib::IntakeState::Idle);
+    else if(!isUp){
+      direct.setState(lib::LiftState::Disabled);
+      intake.setState(lib::IntakeState::Idle);
+    } 
+    else{
+      intake.setState(lib::IntakeState::Idle);
+    }
 
-    if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_B)) intake.sort_override = !intake.sort_override;
+    if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_B)) direct.setState(lib::LiftState::Disabled);;
 
     //clamp control
     if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) mogoClamp.toggle();
@@ -84,7 +97,29 @@ void opcontrol() {
     if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)) doinker.toggle();
 
     //direct mech control
-    if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)) direct.getState() == lib::LiftState::Scoring ? direct.setState(lib::LiftState::Disabled) : direct.setState(lib::LiftState::Scoring);
+    if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)){
+      if(!isUp){
+        direct.setState(lib::LiftState::Scoring);
+        isUp = !isUp;
+      }
+
+      else{
+       direct.setState(lib::LiftState::Disabled);
+       isUp = !isUp;
+      }
+    } 
+
+    //push arm down
+    if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)){
+      if(trapDirect) {
+        direct.moveVelocity(-50);
+        trapDirect = !trapDirect;
+      }
+      else{
+        direct.moveVelocity(0);
+        trapDirect = !trapDirect;
+      }
+    }
 
     pros::delay(15);
   }

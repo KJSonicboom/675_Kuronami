@@ -4,7 +4,7 @@
 #include "lib/intake.hpp"
 #include "lib/chassis.h"
 
-// #include "EZ-Template/api.hpp"
+#include "EZ-Template/api.hpp"
 #include "lemlib/api.hpp"
 
 #include "pros/adi.hpp"
@@ -61,18 +61,55 @@ inline Rotation odomV(13);
 inline lib::TrackingWheel Vtrack(odomV, 2.44);
 inline lib::TrackingWheel Htrack(odomH, 2.44);
 
-// create the chassis
-inline lib::Chassis chassis = lib::Chassis(&leftMotors, &rightMotors, &imu, &Vtrack, 480, 2.75);
+//Lemlib stuff
 
-//======================EZ & Lemlib===========================
+// // horizontal tracking wheel
+// lemlib::TrackingWheel lemlib_horizontal_tracking_wheel(&odomH, lemlib::Omniwheel::NEW_275, -5.75);
 
-// ez::Drive ezChassis(
-//     // These are your drive motors, the first motor is used for sensing!
-//     {-9, -16, -21},     // Left Chassis Ports (negative port will reverse it!)
-//     {3, 14, 18},  // Right Chassis Ports (negative port will reverse it!)
+// inline lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
+//                               &rightMotors, // right motor group
+//                               10, // 11.5 inch track width
+//                               lemlib::Omniwheel::NEW_325, // using new 3.25" omnis
+//                               480, // drivetrain rpm is 450
+//                               2 // horizontal drift is 2 (idk what this means)
+// );
 
-//     12,       // IMU Port
-//     3.25,   // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
-//     480);  // Wheel RPM = cartridge * (motor gear / wheel gear)
+// // odometry settings
+// inline lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to null
+//                             nullptr, // vertical tracking wheel 2, set to nullptr as we are using IMEs
+//                             &lemlib_horizontal_tracking_wheel, // horizontal tracking wheel 1
+//                             nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
+//                             &imu // inertial sensor
+// );
 
-// ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
+// // lateral PID controller
+// inline lemlib::ControllerSettings lateral_controller(7, // proportional gain (kP)
+//                                               0, // integral gain (kI)
+//                                               25, // derivative gain (kD)
+//                                               0, // anti windup
+//                                               1, // small error range, in inches
+//                                               100, // small error range timeout, in milliseconds
+//                                               2, // large error range, in inches
+//                                               500, // large error range timeout, in milliseconds
+//                                               0  // maximum acceleration (slew): use if acceleration is too high
+// );                                       
+
+// // angular PID controller
+// inline lemlib::ControllerSettings angular_controller(5, // proportional gain (kP) 
+//                                               0, // integral gain (kI) 
+//                                               48, // dervative gain (kD) 
+//                                               0, // anti windup
+//                                               1, // small error range, in inches
+//                                               100, // small error range timeout, in milliseconds
+//                                               3, // large error range, in inches
+//                                               500, // large error range timeout, in milliseconds
+//                                               0 // maximum acceleration (slew)
+// );
+
+// // create the chassis
+// inline lemlib::Chassis LemlibChassis(drivetrain, // drivetrain settings
+//                         lateral_controller, // lateral PID settings
+//                         angular_controller, // angular PID settings
+//                         sensors // odometry sensors
+// );
+

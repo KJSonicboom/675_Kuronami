@@ -60,7 +60,7 @@ void Intake::loop() {
 
       motor->move(100);
 
-      if(detectRingColor() == teamColor){
+      if(detectRingColor() != ringColor::NOTHING){
         motor->tare_position();
         motor->move_absolute(350, 400);
         delay(750);
@@ -115,5 +115,10 @@ void Intake::loop() {
 
     pros::delay(10);
   }
+}
+
+void Intake::toggleSide(){
+  if(Intake::teamColor == lib::ringColor::BLUE) Intake::teamColor = ringColor::RED;
+  else Intake::teamColor = ringColor::BLUE;
 }
 

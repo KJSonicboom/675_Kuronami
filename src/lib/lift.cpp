@@ -16,7 +16,13 @@ void Lift::loop() {
 
     case LiftState::Disabled:
 
-      motor->move_absolute(DOWN_ANGLE, 50);  
+      motor->move_absolute(ZERO, 50);  
+
+      break;
+
+    case LiftState::Down:
+      
+      motor->move_absolute(DOWN_ANGLE, 70);
 
       break;
 
@@ -42,6 +48,10 @@ void Lift::moveArm(int targetDegree, int timeout){
 
   armPID.reset();
 
+}
+
+void Lift::moveVelocity(int velocity){
+  motor->move_velocity(velocity);
 }
 
 float Lift::getAngle() { return target; }

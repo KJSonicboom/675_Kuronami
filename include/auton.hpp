@@ -1,6 +1,7 @@
 #include "api.h"
 using namespace pros;
 
+extern void init();
 extern void skills();
 extern void blue_team();
 extern void red_team();

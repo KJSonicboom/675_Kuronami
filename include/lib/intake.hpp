@@ -40,6 +40,7 @@ public:
 
   }
 
+  void toggleSide();
   void loop() override;
 
   };

@@ -9,13 +9,14 @@
 
 namespace lib {
 
-enum class LiftState {Disabled, Scoring};
+enum class LiftState {Disabled, Down, Scoring};
 
-class Lift : public StateMachine<LiftState, LiftState::Scoring>, public ryan::TaskWrapper {
+class Lift : public StateMachine<LiftState, LiftState::Disabled>, public ryan::TaskWrapper {
 
 private:
   std::shared_ptr<pros::Motor> motor;
-  const float DOWN_ANGLE = 5;
+  const float DOWN_ANGLE = 100;
+  const float ZERO = 0;
   const float UP_ANGLE = -710 ;
 
   const float gearRatio;
@@ -38,6 +39,7 @@ public:
   /// @param timeout Timeout so the PID doesn't run forever
   void moveArm(int targetDegree, int timeout);
 
+  void moveVelocity(int velocity);
 
   float getAngle();
   
