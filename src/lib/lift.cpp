@@ -3,13 +3,13 @@
 #include "robotconfig.h"
 #include <cstdint>
 #include <iostream>
+#include <string>
 
 using namespace lib;
 
 void Lift::loop() {
 
   uint32_t now = pros::millis();
-  motor->tare_position();
   
   while (true) {
     switch (getState()) {
@@ -20,15 +20,9 @@ void Lift::loop() {
 
       break;
 
-    case LiftState::Down:
-      
-      motor->move_absolute(DOWN_ANGLE, 70);
-
-      break;
-
-    case LiftState::Scoring:
-
       motor->move_absolute(UP_ANGLE, 100);
+
+      master.set_text(0, 0, std::to_string(motor->get_position()));
 
       break;
     }

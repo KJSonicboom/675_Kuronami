@@ -81,14 +81,12 @@ void opcontrol() {
     else if(controller.get_digital(E_CONTROLLER_DIGITAL_R2)) intake.setState(lib::IntakeState::Out);
     else if(controller.get_digital(E_CONTROLLER_DIGITAL_L2)) intake.setState(lib::IntakeState::Reload);
     else if(!isUp){
-      direct.setState(lib::LiftState::Disabled);
+      // direct.setState(lib::LiftState::Disabled);
       intake.setState(lib::IntakeState::Idle);
     } 
     else{
       intake.setState(lib::IntakeState::Idle);
     }
-
-    if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_B)) direct.setState(lib::LiftState::Disabled);;
 
     //clamp control
     if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) mogoClamp.toggle();
@@ -108,18 +106,6 @@ void opcontrol() {
        isUp = !isUp;
       }
     } 
-
-    //push arm down
-    if(controller.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)){
-      if(trapDirect) {
-        direct.moveVelocity(-50);
-        trapDirect = !trapDirect;
-      }
-      else{
-        direct.moveVelocity(0);
-        trapDirect = !trapDirect;
-      }
-    }
 
     pros::delay(15);
   }

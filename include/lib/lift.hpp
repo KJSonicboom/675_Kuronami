@@ -15,9 +15,9 @@ class Lift : public StateMachine<LiftState, LiftState::Disabled>, public ryan::T
 
 private:
   std::shared_ptr<pros::Motor> motor;
-  const float DOWN_ANGLE = 100;
+  // const float DOWN_ANGLE = 0;
   const float ZERO = 0;
-  const float UP_ANGLE = -710 ;
+  const float UP_ANGLE = -135;
 
   const float gearRatio;
 
@@ -31,6 +31,7 @@ public:
   Lift(pros::Motor *motor, double gearRatio) : motor(motor), gearRatio(gearRatio) {
     motor->set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     motor->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    motor->tare_position();
   }
   void loop() override;
 
