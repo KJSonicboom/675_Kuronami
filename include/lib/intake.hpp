@@ -7,7 +7,7 @@
 
 namespace lib {
 
-enum class IntakeState {Eat, Picky, Reload, Out, Jam, Idle};
+enum class IntakeState {Eat, Picky, Reload, Out, Jam, Idle, Hold};
 
 enum class ringColor {RED, BLUE, NOTHING};
 

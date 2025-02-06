@@ -31,6 +31,7 @@ void Intake::loop() {
         }
       }
     } else {
+      
       // Reset the start time when velocity is normal
       jamStartTime = 0;
       jamTimer = 0;
@@ -49,8 +50,6 @@ void Intake::loop() {
       color->set_led_pwm(0);
 
       motor->move(127);
-
-      // controller.set_text(0, 5, std::to_string(motor->get_position()));
 
       break;
 
@@ -111,12 +110,24 @@ void Intake::loop() {
       }
       setState(IntakeState::Eat);
       break;
+
+    case IntakeState::Hold:
+
+      color->set_led_pwm(100);
+    
+      if(detectRingColor() != ringColor::NOTHING){
+        motor->move(0);
+      }
+      else{
+        motor->move(127);
+      }
     }
 
     pros::delay(10);
   }
 }
 
+//not used why did i make this
 void Intake::toggleSide(){
   if(Intake::teamColor == lib::ringColor::BLUE) Intake::teamColor = ringColor::RED;
   else Intake::teamColor = ringColor::BLUE;

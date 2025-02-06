@@ -1,5 +1,4 @@
 #include "lib/util.h"
-#include "lib/point.hpp"
 #include <cmath>
 
 float slew(float current, float target, float rate) {

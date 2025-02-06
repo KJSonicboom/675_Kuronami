@@ -32,6 +32,10 @@ inline Motor right_back_motor(18, pros::v5::MotorGears::blue);
 
 inline MotorGroup rightMotors({3, 14, 18}, pros::MotorGearset::blue);
 
+inline Imu imu (20); 
+
+inline lib::Chassis drivetrain = lib::Chassis(&leftMotors, &rightMotors, 480, 2.75);
+
 //=======================INTAKE=============================
 
 inline Motor intaker(-4, pros::v5::MotorGears::blue);
@@ -46,10 +50,10 @@ inline lib::Lift direct(&arm, 0.5);
 //========================MISC===============================
 
 inline Controller controller (E_CONTROLLER_MASTER);
-inline Imu imu (12); 
 
-inline adi::Pneumatics mogoClamp('G', false);
+inline adi::Pneumatics mogoClamp('F', false);
 inline adi::Pneumatics doinker('H', false);
+// inline adi::Pneumatics PTO('F', true);
 
 //======================ODOM STUFF===========================
 
@@ -57,28 +61,25 @@ inline adi::Pneumatics doinker('H', false);
 inline Rotation odomH(8); 
 inline Rotation odomV(13);
 
-//lib odom wheels
-inline lib::TrackingWheel Vtrack(odomV, 2.44);
-inline lib::TrackingWheel Htrack(odomH, 2.44);
-
-//Lemlib stuff
+// //Lemlib stuff
 
 // // horizontal tracking wheel
-// lemlib::TrackingWheel lemlib_horizontal_tracking_wheel(&odomH, lemlib::Omniwheel::NEW_275, -5.75);
+// lemlib::TrackingWheel lemlib_horizontal_tracking_wheel(&odomH, lemlib::Omniwheel::NEW_275, 1.5);
+// lemlib::TrackingWheel lemlib_vertical_tracking_wheel(&odomH, lemlib::Omniwheel::NEW_275, 1.25);
 
-// inline lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
+// inline lemlib::Drivetrain lemlibDrivetrain(&leftMotors, // left motor group
 //                               &rightMotors, // right motor group
-//                               10, // 11.5 inch track width
+//                               10, // 10 inch track width
 //                               lemlib::Omniwheel::NEW_325, // using new 3.25" omnis
-//                               480, // drivetrain rpm is 450
+//                               480, // drivetrain rpm is 480
 //                               2 // horizontal drift is 2 (idk what this means)
 // );
 
 // // odometry settings
-// inline lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to null
-//                             nullptr, // vertical tracking wheel 2, set to nullptr as we are using IMEs
+// inline lemlib::OdomSensors sensors(&lemlib_vertical_tracking_wheel, // vertical tracking wheel 1
+//                             nullptr,
 //                             &lemlib_horizontal_tracking_wheel, // horizontal tracking wheel 1
-//                             nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
+//                             nullptr, // horizontal tracking wheel 2
 //                             &imu // inertial sensor
 // );
 
@@ -107,7 +108,7 @@ inline lib::TrackingWheel Htrack(odomH, 2.44);
 // );
 
 // // create the chassis
-// inline lemlib::Chassis LemlibChassis(drivetrain, // drivetrain settings
+// inline lemlib::Chassis chassis(lemlibDrivetrain, // drivetrain settings
 //                         lateral_controller, // lateral PID settings
 //                         angular_controller, // angular PID settings
 //                         sensors // odometry sensors

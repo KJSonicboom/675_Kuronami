@@ -16,13 +16,20 @@ void Lift::loop() {
 
     case LiftState::Disabled:
 
-      motor->move_absolute(ZERO, 50);  
+      motor->move_absolute(ZERO, 35);  
 
       break;
+    
+    case LiftState::Scoring:
 
-      motor->move_absolute(UP_ANGLE, 100);
+      motor->move_absolute(UP_ANGLE, 110);
 
-      master.set_text(0, 0, std::to_string(motor->get_position()));
+      break;
+    
+
+    case LiftState::AllianceStake:
+
+      motor->move_absolute(ALLIANCE_ANGLE, 110);
 
       break;
     }
@@ -43,9 +50,4 @@ void Lift::moveArm(int targetDegree, int timeout){
   armPID.reset();
 
 }
-
-void Lift::moveVelocity(int velocity){
-  motor->move_velocity(velocity);
-}
-
 float Lift::getAngle() { return target; }

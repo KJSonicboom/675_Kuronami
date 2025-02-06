@@ -1,5 +1,6 @@
 #include "api.h"
 using namespace pros;
+#include "lemlib/api.hpp"
 
 extern void init();
 extern void skills();
@@ -11,3 +12,4 @@ extern void red_goal_side();
 extern void red_stack_side();
 extern void blue_elims_goal_side();
 extern void red_elims_goal_side();
+
