@@ -61,56 +61,56 @@ inline adi::Pneumatics doinker('H', false);
 inline Rotation odomH(8); 
 inline Rotation odomV(13);
 
-// //Lemlib stuff
+//Lemlib stuff
 
-// // horizontal tracking wheel
-// lemlib::TrackingWheel lemlib_horizontal_tracking_wheel(&odomH, lemlib::Omniwheel::NEW_275, 1.5);
-// lemlib::TrackingWheel lemlib_vertical_tracking_wheel(&odomH, lemlib::Omniwheel::NEW_275, 1.25);
+// horizontal tracking wheel
+inline lemlib::TrackingWheel lemlib_horizontal_tracking_wheel(&odomH, lemlib::Omniwheel::NEW_275, -1.5);
+inline lemlib::TrackingWheel lemlib_vertical_tracking_wheel(&odomV, lemlib::Omniwheel::NEW_275, 1.25);
 
-// inline lemlib::Drivetrain lemlibDrivetrain(&leftMotors, // left motor group
-//                               &rightMotors, // right motor group
-//                               10, // 10 inch track width
-//                               lemlib::Omniwheel::NEW_325, // using new 3.25" omnis
-//                               480, // drivetrain rpm is 480
-//                               2 // horizontal drift is 2 (idk what this means)
-// );
+inline lemlib::Drivetrain lemlibDrivetrain(&leftMotors, // left motor group
+                              &rightMotors, // right motor group
+                              10, // 10 inch track width
+                              lemlib::Omniwheel::NEW_325, // using new 3.25" omnis
+                              480, // drivetrain rpm is 480
+                              2 // horizontal drift is 2 (idk what this means)
+);
 
-// // odometry settings
-// inline lemlib::OdomSensors sensors(&lemlib_vertical_tracking_wheel, // vertical tracking wheel 1
-//                             nullptr,
-//                             &lemlib_horizontal_tracking_wheel, // horizontal tracking wheel 1
-//                             nullptr, // horizontal tracking wheel 2
-//                             &imu // inertial sensor
-// );
+// odometry settings
+inline lemlib::OdomSensors sensors(&lemlib_vertical_tracking_wheel, // vertical tracking wheel 1
+                            nullptr,
+                            &lemlib_horizontal_tracking_wheel, // horizontal tracking wheel 1
+                            nullptr, // horizontal tracking wheel 2
+                            &imu // inertial sensor
+);
 
-// // lateral PID controller
-// inline lemlib::ControllerSettings lateral_controller(7, // proportional gain (kP)
-//                                               0, // integral gain (kI)
-//                                               25, // derivative gain (kD)
-//                                               0, // anti windup
-//                                               1, // small error range, in inches
-//                                               100, // small error range timeout, in milliseconds
-//                                               2, // large error range, in inches
-//                                               500, // large error range timeout, in milliseconds
-//                                               0  // maximum acceleration (slew): use if acceleration is too high
-// );                                       
+// lateral PID controller
+inline lemlib::ControllerSettings lateral_controller(7, // proportional gain (kP)
+                                              0, // integral gain (kI)
+                                              25, // derivative gain (kD)
+                                              0, // anti windup
+                                              1, // small error range, in inches
+                                              100, // small error range timeout, in milliseconds
+                                              2, // large error range, in inches
+                                              500, // large error range timeout, in milliseconds
+                                              0  // maximum acceleration (slew): use if acceleration is too high
+);                                       
 
-// // angular PID controller
-// inline lemlib::ControllerSettings angular_controller(5, // proportional gain (kP) 
-//                                               0, // integral gain (kI) 
-//                                               48, // dervative gain (kD) 
-//                                               0, // anti windup
-//                                               1, // small error range, in inches
-//                                               100, // small error range timeout, in milliseconds
-//                                               3, // large error range, in inches
-//                                               500, // large error range timeout, in milliseconds
-//                                               0 // maximum acceleration (slew)
-// );
+// angular PID controller
+inline lemlib::ControllerSettings angular_controller(5, // proportional gain (kP) 
+                                              0, // integral gain (kI) 
+                                              48, // dervative gain (kD) 
+                                              0, // anti windup
+                                              1, // small error range, in inches
+                                              100, // small error range timeout, in milliseconds
+                                              3, // large error range, in inches
+                                              500, // large error range timeout, in milliseconds
+                                              0 // maximum acceleration (slew)
+);
 
-// // create the chassis
-// inline lemlib::Chassis chassis(lemlibDrivetrain, // drivetrain settings
-//                         lateral_controller, // lateral PID settings
-//                         angular_controller, // angular PID settings
-//                         sensors // odometry sensors
-// );
+// create the chassis
+inline lemlib::Chassis chassis(lemlibDrivetrain, // drivetrain settings
+                        lateral_controller, // lateral PID settings
+                        angular_controller, // angular PID settings
+                        sensors // odometry sensors
+);
 
